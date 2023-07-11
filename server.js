@@ -5,7 +5,6 @@ const cors = require("cors")
 const path = require("path")
 
 //create web server
-
 const app = express()
 
 //middleware
@@ -37,7 +36,15 @@ app.post("/upload", (req, res) => {
   const fileName = uuidv4() + path.extname(file.name)
   const upload_dir = `${__dirname}/client/public/uploads`
   //save file to uploads folder
-
+  file.mv(`${upload_dir}/${fileName}`, (err) => {
+    if (err) {
+      return res.status(500).send(err)
+    }
+    res.json({
+      fileName: fileName,
+      filePath: `/uploads/${fileName}`,
+    })
+  })
 })
 
 app.listen(80, () => {
